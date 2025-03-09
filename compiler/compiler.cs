@@ -23,6 +23,11 @@ namespace CompilerSpace {
                 fullCode += arg + " ";
             }
             List<(Tokenizer.TokenType, string)> tokens = Tokenizer.Tokenize(fullCode);
+            CF.WriteLine("Separating to Tokens...", ConsoleColor.White);
+            foreach ((Tokenizer.TokenType, string) token in tokens)
+            {
+                CF.WriteLine($"[{token.Item1}]: {token.Item2}", ConsoleColor.Magenta);
+            }
         }
     }
 

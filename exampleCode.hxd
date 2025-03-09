@@ -1,2 +1,1 @@
-var some = 2*6;
-#[[ as we can see, it's a variable  ]] log(some+2);
+1+2/3 = 1
