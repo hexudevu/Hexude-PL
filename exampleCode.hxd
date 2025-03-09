@@ -1,0 +1,2 @@
+var some = 2*6;
+log(some+2);
