@@ -7,14 +7,30 @@
   "targets": {
     ".NETCoreApp,Version=v8.0": {
       "compiler/1.0.0": {
+        "dependencies": {
+          "utils": "1.0.0"
+        },
         "runtime": {
           "compiler.dll": {}
+        }
+      },
+      "utils/1.0.0": {
+        "runtime": {
+          "utils.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
         }
       }
     }
   },
   "libraries": {
     "compiler/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "utils/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""

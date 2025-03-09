@@ -13,3 +13,7 @@ d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj
 d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj\Debug\net8.0\compiler.pdb
 d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj\Debug\net8.0\compiler.genruntimeconfig.cache
 d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj\Debug\net8.0\ref\compiler.dll
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\bin\Debug\net8.0\utils.dll
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\bin\Debug\net8.0\utils.pdb
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj\Debug\net8.0\compiler.csproj.AssemblyReference.cache
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\compiler\obj\Debug\net8.0\compiler.csproj.Up2Date

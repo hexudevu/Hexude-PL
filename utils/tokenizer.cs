@@ -2,15 +2,15 @@ using System;
 using System.Collections.Generic;
 
 namespace Utils {
-    class Tokenizer {
+    public class Tokenizer {
         public enum TokenType
         {
             Identifier,    // переменная, имя функции, type
-            Number,        // числа (пр-р, 123, 3.14)
-            Operator,      // +, -, *, /
+            Number,        // числа + числа с плавающей точкой
+            Operator,      // +, -, *, /, ^, or, and
             Punctuation,   // ; , ( ) { }
             Keyword,       // if, while, return
-            String,        // "Hello"
+            String,        // "чтото в кавычках"
             Comment,       // # или #[[ ]]
             EndOfFile      // конец файла
         }
@@ -18,9 +18,6 @@ namespace Utils {
         public static List<(TokenType, string)> Tokenize(string text)
         {
             List<(TokenType, string)> tokens = new List<(TokenType, string)>();
-
-            // Например, добавим токен "if" как ключевое слово
-            tokens.Add((TokenType.Keyword, "if"));
 
             return tokens;
         }

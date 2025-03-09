@@ -1,0 +1,12 @@
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\bin\Debug\net8.0\utils.deps.json
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\bin\Debug\net8.0\utils.dll
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\bin\Debug\net8.0\utils.pdb
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.GeneratedMSBuildEditorConfig.editorconfig
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.AssemblyInfoInputs.cache
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.AssemblyInfo.cs
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.csproj.CoreCompileInputs.cache
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.sourcelink.json
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.dll
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\refint\utils.dll
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\utils.pdb
+d:\Личные данные\Документы\C#\Hexude\Hexude-PL\utils\obj\Debug\net8.0\ref\utils.dll
