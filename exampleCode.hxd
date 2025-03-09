@@ -1,2 +1,2 @@
 var some = 2*6;
-log(some+2);
+#[[ as we can see, it's a variable  ]] log(some+2);

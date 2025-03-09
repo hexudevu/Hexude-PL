@@ -6,7 +6,8 @@ namespace CompilerSpace {
         static void Main(string[] args) {
             string pathToProject = "../../../..";
             string[] arguments = File.ReadAllLines($"{pathToProject}/exampleCode.{Compiler.FileBody}");
-            Compiler.Сompile(arguments);
+            CompiledObject obj = Compiler.Сompile(arguments);
+            obj.Execute();
         }
     }
 }
