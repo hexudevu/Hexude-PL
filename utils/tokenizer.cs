@@ -1,21 +1,26 @@
 using System;
 using System.Collections.Generic;
-using System.Diagnostics.Tracing;
 using System.Linq;
-using System.Security.Cryptography.X509Certificates;
 
 namespace Utils {
     public enum TokenType
     {
-        none,           // None | like null                 | true
-        Identifier,     // переменная, имя функции, type    | true
-        Number,         // числа + числа с плавающей точкой | true
-        Operator,       // +, -, *, /, ^, or, and           | true
-        Punctuation,    // ; , ( ) { }                      | true
+        none,           // None                             | true
+        Identifier,     // переменная, имя функции          | true
+        Integer,        // int number                       | true
+        Float,          // float number                     | true
+        String,         // "строки"                         | true
+        Range,          // пр-р: 2:10                       | true
+        Operator,       // +, -, *, /, ^                    | true 
+        LogicOperator,  // or, and, not                     | true
+        UnaryOperator,  // x++; x--;                        | true
+        Comparison,     // >, <, >=...                      | true
+        Assignment,     // =, +=, -=...                     | true
+        Bracket,        // ( ); { }; [ ];                   | true
+        Punctuation,    // ; , .                            | true
         Literal,        // true, false, nil                 | true
         Keyword,        // if, while, return                | true
-        FunctionCall,   // как log()                        | true
-        String,         // "строки"                         | true
+        FunctionCall,   // built-in функции                 | true
         Comment,        // ~! OR ~!{    }~                  | true
         EndOfFile       // конец файла                      | true
     }
@@ -33,23 +38,29 @@ namespace Utils {
             "true", "false", "nil"
         };
         public static string[] keywords = {
-            "if", "elseif", "else",
+            "if", "elseif", "else", "in",
             "while", "for", "foreach",
             "func", "return", 
             "var", "const", "let",
         };
         public static string[] builtins = {
-            "log", 
+            "LogLine", "Log", 
             "min", "max", "clamp",
             "random"
         };
-
+        public static string[] logicOperators = {
+            "or", "and", "not"
+        };
         public static List<Token> Tokenize(string text)
         {
             List<Token> tokens = new List<Token>();
             string currentToken = "";
             TokenType currentType = TokenType.none;
 
+            //сокращение индекса мб
+            int clampIndex(int index) {
+                return Math.Clamp(index, 0, text.Length-1);
+            }
             //добавить символ в текущий токен
             void addSymbol(char symbol) {
                 if (string.IsNullOrEmpty(currentToken))
@@ -67,6 +78,8 @@ namespace Utils {
                     currentType = TokenType.Literal;
                 else if (builtins.Contains(currentToken))
                     currentType = TokenType.FunctionCall;
+                else if (logicOperators.Contains(currentToken))
+                    currentType = TokenType.LogicOperator;
                 else if (char.IsLetter(currentToken[0]))
                     currentType = TokenType.Identifier;
             }
@@ -114,35 +127,56 @@ namespace Utils {
                     case ' ':
                         addToken();
                         break;
-                    //обработка арифметических операторов #1
-                    case '+': case '-': case '*': case '/': case '^':
+                    //обработка арифметических операторов #1 + унарные операторов + присвоения #1
+                    case '+': case '-':
                         addToken();
-                        addAdditionalToken(TokenType.Operator, x.ToString());
+                        if (text[i+1] == x) {
+                            addAdditionalToken(TokenType.UnaryOperator, x.ToString()+x.ToString());
+                            skip(i+2);
+                        } else if (text[i+1] == '=') {
+                            addAdditionalToken(TokenType.Assignment, x.ToString()+'=');
+                            skip(i+2);
+                        } else
+                            addAdditionalToken(TokenType.Operator, x.ToString());
+                        break;
+                    //обработка арифметических операторов #2 + присвоения #2
+                    case '*': case '/': case '^':
+                        addToken();
+                        if (text[i+1] == '=') {
+                            addAdditionalToken(TokenType.Assignment, x.ToString()+'=');
+                            skip(i+2);
+                        } else
+                            addAdditionalToken(TokenType.Operator, x.ToString());
                         break;
                     //обработка логических операторов сравнений #1
                     case '>': case '<':
                         if (text[i+1] == '=') {
                             addToken();
-                            addAdditionalToken(TokenType.Operator, x+"=");
+                            addAdditionalToken(TokenType.Comparison, x+"=");
                             skip(i+2);
                         } else {
                             addToken();
-                            addAdditionalToken(TokenType.Operator, x.ToString());
+                            addAdditionalToken(TokenType.Comparison, x.ToString());
                         }
                         break;
                     //обработка логических операторов сравнений #2 + арифметическое равно
                     case '=': case '!':
                         if (text[i+1] == '=') {
                             addToken();
-                            addAdditionalToken(TokenType.Operator, x+"=");
+                            addAdditionalToken(TokenType.Comparison, x+"=");
                             skip(i+2);
                         } else if (x == '=') {
                             addToken();
-                            addAdditionalToken(TokenType.Operator, "=");
+                            addAdditionalToken(TokenType.Assignment, "=");
                         }
                         break;
-                    //обработка пунктуационных символов
-                    case '(': case ')': case '{': case '}': case '[': case ']': case ';': case ',':
+                    //обработка скобок
+                    case '(': case ')': case '{': case '}': case '[': case ']':
+                        addToken();
+                        addAdditionalToken(TokenType.Bracket, x.ToString());
+                        break;
+                    //обработка пунктуации
+                    case ';': case ',': case '.':
                         addToken();
                         addAdditionalToken(TokenType.Punctuation, x.ToString());
                         break;
@@ -158,6 +192,27 @@ namespace Utils {
                             }
                         }
                         break;
+                    //обработка диапазонов
+                    case ':': 
+                        int lastTokenIndex = tokens.Count-1;
+                        Token lastToken = tokens[lastTokenIndex];
+                        if (string.IsNullOrEmpty(currentToken) && text[i-1]!=' ' && lastToken.Type == TokenType.Integer) {
+                            string min = lastToken.Value;
+                            tokens.RemoveAt(lastTokenIndex);
+                            currentToken+=min+':';
+                            for (int j = i+1; j < text.Length; j++) {
+                                char y = text[j];
+                                if (char.IsDigit(y))
+                                    currentToken+=y;
+                                else {
+                                    currentType = TokenType.Range;
+                                    addToken();
+                                    skip(j);
+                                    break;
+                                }
+                            }
+                        }
+                        break;
                     //обработка комментариев + позже побитовый оператор
                     case '~':
                         char waitFor = '\n';
@@ -170,11 +225,11 @@ namespace Utils {
                         for (int j = i+1; j < text.Length; j++) {
                             char y = text[j];
                             if (y == waitFor && waitFor=='\n') {
-                                addAdditionalToken(TokenType.Comment, text.Substring(i+2, j-i-2));
+                                addAdditionalToken(TokenType.Comment, text.Substring(i+2, clampIndex(j-i-2)));
                                 skip(j);
                                 break;
-                            } else if (y == waitFor && waitFor=='}') {
-                                addAdditionalToken(TokenType.Comment, text.Substring(i+2, j-i-1));
+                            } else if (y==waitFor && text[j+1]=='~' && waitFor=='}') {
+                                addAdditionalToken(TokenType.Comment, text.Substring(i+2, clampIndex(j-i-1)));
                                 skip(j+1);
                                 break;
                             }
@@ -189,12 +244,15 @@ namespace Utils {
                         //обработка чисел
                         if (char.IsDigit(x)) {
                             if (string.IsNullOrEmpty(currentToken))
-                                currentType = TokenType.Number;
+                                currentType = TokenType.Integer;
                             bool dot = false;
                             for (int j = i; j < text.Length; j++) {
                                 char y = text[j];
                                 if (char.IsDigit(y) || (!dot && y == '.')) {
-                                    if (y=='.') dot = true;
+                                    if (y=='.') {
+                                        dot = true;
+                                        currentType = TokenType.Float;
+                                    }
                                     currentToken += y;
                                     continue;
                                 } else {

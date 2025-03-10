@@ -1,14 +1,16 @@
-const WATER_LEVEL = 500;
-var y = random(450, 650);
+~!{ Пример кода>.< }~
 
-for (int i = 0; i < 100; i+1) {
-    let shake = random(-50, 50)
-    if (y > WATER_LEVEL) {
-        log(y + " :выше уровня воды. Падение на " + shake + ".")
-        y = y - shake
-    } else {
-        log(y + " :ниже уровня воды. Подьём на " + shake + ".")
-        y = y + shake
+var matrix = {
+    {2, 3, 6},
+    {3, 7, 2},
+    {9, 4, 5}
+};
+
+~! переберём матрицу
+
+foreach (var array in matrix) {
+    foreach (var value in array) {
+        Log(value + "  ");
     }
+    LogLine();
 }
-log(y)
