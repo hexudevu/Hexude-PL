@@ -43,6 +43,7 @@ namespace Utils {
 
             //перебор по символам и логика токенайзера
             for (int i = 0; i < text.Length; i++) {
+                //skip logic
                 if (skipTo != -1) {
                     if (skipTo > i) {
                         continue;
@@ -50,16 +51,48 @@ namespace Utils {
                         skipTo = -1;
                     }
                 }
+                //обработка символа
                 char x = text[i];
                 switch (x) {
                     //разделение токенов
                     case ' ':
                         addToken();
                         break;
-                    //обработка операторов #1
-                    case '+': case '-': case '*': case '/': case '^': case '=':
+                    //обработка арифметических операторов #1
+                    case '+': case '-': case '*': case '/': case '^':
                         addToken();
                         addAdditionalToken(TokenType.Operator, x.ToString());
+                        break;
+                    //обработка логических операторов сравнений #1
+                    case '>': case '<':
+                        if (text[i+1] == '=') {
+                            addToken();
+                            addAdditionalToken(TokenType.Operator, x+"=");
+                            skip(i+2);
+                        } else {
+                            addToken();
+                            addAdditionalToken(TokenType.Operator, x.ToString());
+                        }
+                        break;
+                    //обработка логических операторов сравнений #2 + арифметическое равно
+                    case '=': case '!':
+                        if (text[i+1] == '=') {
+                            addToken();
+                            addAdditionalToken(TokenType.Operator, x+"=");
+                            skip(i+2);
+                        } else if (x == '=') {
+                            addToken();
+                            addAdditionalToken(TokenType.Operator, "=");
+                        }
+                        break;
+                    //обработка пунктуационных символов
+                    case '(': case ')': case '{': case '}': case '[': case ']': case ';': case ',':
+                        addToken();
+                        addAdditionalToken(TokenType.Punctuation, x.ToString());
+                        break;
+                    //обработка конца строки
+                    case '\n':
+                        addToken();
                         break;
                     //оптимизация проверок + остальное
                     default:
@@ -67,9 +100,10 @@ namespace Utils {
                         if (char.IsDigit(x)) {
                             if (string.IsNullOrEmpty(currentToken))
                                 currentType = TokenType.Number;
+                            bool dot = false;
                             for (int j = i; j < text.Length; j++) {
                                 char y = text[j];
-                                if (char.IsDigit(y)) {
+                                if (char.IsDigit(y) || (!dot && y == '.')) {
                                     currentToken += y;
                                     continue;
                                 } else {
