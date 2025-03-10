@@ -20,13 +20,19 @@ namespace CompilerSpace {
             string fullCode = "";
             foreach (string arg in args)
             {
-                fullCode += arg + " ";
+                fullCode += arg + '\n';
             }
             List<(Tokenizer.TokenType, string)> tokens = Tokenizer.Tokenize(fullCode);
             CF.WriteLine("Separating to Tokens...", ConsoleColor.White);
             foreach ((Tokenizer.TokenType, string) token in tokens)
             {
-                CF.WriteLine($"[{token.Item1}]: {token.Item2}", ConsoleColor.Magenta);
+                if (token.Item1 == Tokenizer.TokenType.EndOfFile) 
+                    CF.WriteLine($"[{token.Item1}]", ConsoleColor.Magenta);
+                else
+                {
+                    CF.Write($"[{token.Item1}]: ", ConsoleColor.DarkMagenta);
+                    CF.WriteLine($"{token.Item2}", ConsoleColor.Magenta);
+                }
             }
         }
     }
