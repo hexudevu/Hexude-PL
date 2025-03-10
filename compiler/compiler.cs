@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Utils;
 namespace CompilerSpace {
     class Compiler {
-        public static string FileBody = "hxd";
+        public static string FileBody = "hexude";
         public static CompiledObject Сompile(string[] args) {
             CompiledObject compiledObject = new CompiledObject();
             CF.WriteLine("Compiling...");
@@ -23,7 +23,7 @@ namespace CompilerSpace {
                 fullCode += arg + '\n';
             }
             List<(Tokenizer.TokenType, string)> tokens = Tokenizer.Tokenize(fullCode);
-            CF.WriteLine("Separating to Tokens...", ConsoleColor.White);
+            CF.WriteLine("Separating to Tokens...");
             foreach ((Tokenizer.TokenType, string) token in tokens)
             {
                 if (token.Item1 == Tokenizer.TokenType.EndOfFile) 

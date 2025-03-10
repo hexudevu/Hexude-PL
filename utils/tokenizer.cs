@@ -13,12 +13,16 @@ namespace Utils {
             Number,         // числа + числа с плавающей точкой | true
             Operator,       // +, -, *, /, ^, or, and           | true
             Punctuation,    // ; , ( ) { }                      | true
+            Literal,        // true, false, nil                 | false
             Keyword,        // if, while, return                | true
             String,         // "строки"                         | true
             Comment,        // ~! OR ~!{    }~                  | true
             EndOfFile       // конец файла                      | true
         }
 
+        public static string[] literals = {
+            "true", "false", "nil"
+        };
         public static string[] keywords = {
             "if", "elseif", "else",
             "while", "for", "foreach",
@@ -42,12 +46,14 @@ namespace Utils {
 
             //переосмысление типа
             void rethinkType() {
-                if (keywords.Contains(currentToken) && currentType != TokenType.String) {
+                if (currentType == TokenType.String) return;
+
+                if (keywords.Contains(currentToken))
                     currentType = TokenType.Keyword;
-                }
-                else if (char.IsLetter(currentToken[0]) && currentType != TokenType.String) {
+                else if (literals.Contains(currentToken))
+                    currentType = TokenType.Literal;
+                else if (char.IsLetter(currentToken[0]))
                     currentType = TokenType.Identifier;
-                }
             }
 
             //добавить токен
