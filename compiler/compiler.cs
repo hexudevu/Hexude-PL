@@ -22,16 +22,16 @@ namespace CompilerSpace {
             {
                 fullCode += arg + '\n';
             }
-            List<(Tokenizer.TokenType, string)> tokens = Tokenizer.Tokenize(fullCode);
+            List<Token> tokens = Tokenizer.Tokenize(fullCode);
             CF.WriteLine("Separating to Tokens...");
-            foreach ((Tokenizer.TokenType, string) token in tokens)
+            foreach (Token token in tokens)
             {
-                if (token.Item1 == Tokenizer.TokenType.EndOfFile) 
-                    CF.WriteLine($"[{token.Item1}]", ConsoleColor.Magenta);
+                if (token.Type == TokenType.EndOfFile) 
+                    CF.WriteLine($"[{token.Type}]", ConsoleColor.Magenta);
                 else
                 {
-                    CF.Write($"[{token.Item1}]: ", ConsoleColor.DarkMagenta);
-                    CF.WriteLine($"{token.Item2}", ConsoleColor.Magenta);
+                    CF.Write($"[{token.Type}]: ", ConsoleColor.DarkMagenta);
+                    CF.WriteLine($"{token.Value}", ConsoleColor.Magenta);
                 }
             }
         }

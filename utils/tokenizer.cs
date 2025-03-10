@@ -5,21 +5,30 @@ using System.Linq;
 using System.Security.Cryptography.X509Certificates;
 
 namespace Utils {
-    public class Tokenizer {
-        public enum TokenType
-        {
-            none,           // None | like null                 | true
-            Identifier,     // переменная, имя функции, type    | true
-            Number,         // числа + числа с плавающей точкой | true
-            Operator,       // +, -, *, /, ^, or, and           | true
-            Punctuation,    // ; , ( ) { }                      | true
-            Literal,        // true, false, nil                 | false
-            Keyword,        // if, while, return                | true
-            String,         // "строки"                         | true
-            Comment,        // ~! OR ~!{    }~                  | true
-            EndOfFile       // конец файла                      | true
+    public enum TokenType
+    {
+        none,           // None | like null                 | true
+        Identifier,     // переменная, имя функции, type    | true
+        Number,         // числа + числа с плавающей точкой | true
+        Operator,       // +, -, *, /, ^, or, and           | true
+        Punctuation,    // ; , ( ) { }                      | true
+        Literal,        // true, false, nil                 | true
+        Keyword,        // if, while, return                | true
+        FunctionCall,   // как log()                        | true
+        String,         // "строки"                         | true
+        Comment,        // ~! OR ~!{    }~                  | true
+        EndOfFile       // конец файла                      | true
+    }
+    public class Token {
+        public string Value {get; private set;}
+        public TokenType Type {get; private set;}
+        
+        public Token(TokenType type, string value) {
+            Type = type;
+            Value = value;
         }
-
+    }
+    public class Tokenizer {
         public static string[] literals = {
             "true", "false", "nil"
         };
@@ -29,10 +38,15 @@ namespace Utils {
             "func", "return", 
             "var", "const", "let",
         };
+        public static string[] builtins = {
+            "log", 
+            "min", "max", "clamp",
+            "random"
+        };
 
-        public static List<(TokenType, string)> Tokenize(string text)
+        public static List<Token> Tokenize(string text)
         {
-            List<(TokenType, string)> tokens = new List<(TokenType, string)>();
+            List<Token> tokens = new List<Token>();
             string currentToken = "";
             TokenType currentType = TokenType.none;
 
@@ -47,11 +61,12 @@ namespace Utils {
             //переосмысление типа
             void rethinkType() {
                 if (currentType == TokenType.String) return;
-
                 if (keywords.Contains(currentToken))
                     currentType = TokenType.Keyword;
                 else if (literals.Contains(currentToken))
                     currentType = TokenType.Literal;
+                else if (builtins.Contains(currentToken))
+                    currentType = TokenType.FunctionCall;
                 else if (char.IsLetter(currentToken[0]))
                     currentType = TokenType.Identifier;
             }
@@ -60,13 +75,13 @@ namespace Utils {
             void addToken() {
                 if (!string.IsNullOrEmpty(currentToken)) {
                     rethinkType();
-                    tokens.Add((currentType, currentToken));
+                    tokens.Add(new Token(currentType, currentToken));
                     currentToken = "";
                     currentType = TokenType.none;
                 }
             }
             void addAdditionalToken(TokenType type, string token) {
-                tokens.Add((type, token));
+                tokens.Add(new Token(type, token));
             }
 
             int skipTo = -1;

@@ -1,6 +1,14 @@
-~!{ Finally i got it! } var text = "Текстовая информация."
-if (text == "Данные.") {
-    text = "Совпадает!"
-} else {
-    text = "Не совпадает."
+const WATER_LEVEL = 500;
+var y = random(450, 650);
+
+for (int i = 0; i < 100; i+1) {
+    let shake = random(-50, 50)
+    if (y > WATER_LEVEL) {
+        log(y + " :выше уровня воды. Падение на " + shake + ".")
+        y = y - shake
+    } else {
+        log(y + " :ниже уровня воды. Подьём на " + shake + ".")
+        y = y + shake
+    }
 }
+log(y)
