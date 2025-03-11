@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "d:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj": {}
+    "D:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj": {}
   },
   "projects": {
-    "d:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj": {
+    "D:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "d:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj",
+        "projectUniqueName": "D:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj",
         "projectName": "utils",
-        "projectPath": "d:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj",
+        "projectPath": "D:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\utils.csproj",
         "packagesPath": "C:\\Users\\I\\.nuget\\packages\\",
-        "outputPath": "d:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\obj\\",
+        "outputPath": "D:\\Личные данные\\Документы\\C#\\Hexude\\Hexude-PL\\utils\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
